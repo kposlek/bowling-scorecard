@@ -3,15 +3,19 @@
     <input
       type="number"
       class="form-control d-block"
-      placeholder="Insert number of the pins hit"
-      aria-label="Insert number of the pins hit"
+      :placeholder="store.static.inputPlaceholder"
+      :aria-label="store.static.inputPlaceholder"
       aria-describedby="button-addon2"
     />
-    <button class="btn btn-outline-secondary" type="button" id="button-addon2">Add pins</button>
+    <PopoverInfo />
+    <button class="btn btn-outline-secondary" type="button" id="button-addon2">
+      {{ store.static.addButton }}
+    </button>
   </div>
 </template>
 
 <script setup>
+import PopoverInfo from './PopoverInfo.vue'
 import { useScoreStore } from '../../stores/scoreStore.js'
 
 const store = useScoreStore()
