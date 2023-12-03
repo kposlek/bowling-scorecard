@@ -1,16 +1,42 @@
 <template>
-<div>
-  <ScoreInput/>
-</div>
+  <div id="app" class="d-block">
+    <ScoreDisplay />
+  </div>
 </template>
 
 <script setup>
-import ScoreInput from "./components/ScoreInput.vue"
-import { useScoreStore } from '../../stores/scoreStore.js'
+import ScoreDisplay from './components/ScoreDisplay.vue'
+import { useScoreStore } from './../stores/scoreStore'
 
 const store = useScoreStore()
-console.log(store.score) 
+console.log(store.score)
 </script>
 
 <style scoped>
+header {
+  line-height: 1.5;
+}
+
+.logo {
+  display: block;
+  margin: 0 auto 2rem;
+}
+
+@media (min-width: 1024px) {
+  header {
+    display: flex;
+    place-items: center;
+    padding-right: calc(var(--section-gap) / 2);
+  }
+
+  .logo {
+    margin: 0 2rem 0 0;
+  }
+
+  header .wrapper {
+    display: flex;
+    place-items: flex-start;
+    flex-wrap: wrap;
+  }
+}
 </style>
