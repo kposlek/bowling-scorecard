@@ -34,3 +34,18 @@ a,
     padding: 0 2rem;
   }
 }
+
+@media (min-width: 1200px) {
+  body {
+    width: 75%;
+    margin: 0 auto !important;
+    display: flex;
+    place-items: center;
+  }
+
+  #app {
+    /*     display: grid;
+    grid-template-columns: 1fr 1fr; */
+    padding: 0 2rem;
+  }
+}

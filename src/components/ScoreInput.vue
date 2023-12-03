@@ -1,19 +1,27 @@
 <template>
-  <div class="input-group mb-3 w-50 d-flex">
-    <input
-      type="text"
-      class="form-control d-block"
-      :placeholder="store.static.inputPlaceholder"
-      :aria-label="store.static.inputPlaceholder"
-      v-model="store.inputValue"
-      :class="{ 'is-invalid': store.errorMessage }"
-    />
-    <!-- <PopoverInfo /> -->
-    <button class="btn btn-outline-secondary" type="button" id="button-addon2">
-      {{ store.static.addButton }}
-    </button>
+  <div class="mb-3 w-50 m-auto">
+    <div>{{ store.static.inputHeading }}</div>
+    <div class="input-group">
+      <input
+        type="text"
+        class="form-control d-block"
+        v-model="store.inputValue"
+        :class="{ 'is-invalid': store.errorMessage }"
+      />
+      <!-- <PopoverInfo /> -->
+      <button
+        class="btn btn-outline-secondary d-md-block d-none rounded-end"
+        type="button"
+        id="button-addon2"
+      >
+        {{ store.static.addButton }}
+      </button>
+      <button class="btn btn-outline-secondary d-md-none d-block" type="button" id="button-addon2">
+        +
+      </button>
+    </div>
   </div>
-  <div v-if="store.errorMessage" class="d-block text-danger">
+  <div v-if="store.errorMessage" class="d-block text-danger text-center">
     {{ store.errorMessage }}
   </div>
 </template>
@@ -28,10 +36,9 @@ watch(
   () => store.inputValue,
   (newValue) => {
     if (!newValue) {
-      store.errorMessage =
-        'This field is required. Please enter the number of bowling pins you knocked down.'
+      store.inputRequiredError()
     } else if (!store.inputValidation(newValue)) {
-      store.errorMessage = 'The entry is not valid. Please enter a value between 1 and 10.'
+      store.inputValidationError()
     } else {
       store.errorMessage = ''
     }

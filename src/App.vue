@@ -6,10 +6,6 @@
 
 <script setup>
 import ScoreDisplay from './components/ScoreDisplay.vue'
-import { useScoreStore } from './../stores/scoreStore'
-
-const store = useScoreStore()
-console.log(store.score)
 </script>
 
 <style scoped>
