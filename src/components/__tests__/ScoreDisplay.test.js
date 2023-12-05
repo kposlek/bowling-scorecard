@@ -139,7 +139,7 @@ describe('ScoreDisplay', () => {
     })
   })
 
-  describe('print first throw', () => {
+  describe('print third throw', () => {
     let wrapper
     let frameThrow3
     let index

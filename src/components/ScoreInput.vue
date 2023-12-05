@@ -7,6 +7,7 @@
           type="text"
           class="form-control d-block"
           v-model="store.inputValue"
+          :disabled="store.gameOver"
           :class="{ 'is-invalid': store.errorMessage }"
           @keypress.enter="store.addInput()"
         />
@@ -39,6 +40,9 @@
     </div>
     <div class="d-block text-danger fw-bold text-center">
       {{ store.validationError }}
+    </div>
+    <div v-if="store.gameOver" class="d-block text-success fw-bold text-center">
+      {{ store.static.gameOverMessage }}
     </div>
   </div>
 </template>
