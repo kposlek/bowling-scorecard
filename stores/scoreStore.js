@@ -20,7 +20,7 @@ export const useScoreStore = defineStore('score', {
       //test
       inputValue: '',
       frames: [
-        { id: 0, throw1: 'strike', throw2: 0, score: 10 },
+        { id: 0, throw1: 10, throw2: 0, score: 10 },
         { id: 1, throw1: 2, throw2: 5, score: 0 },
         { id: 2, throw1: undefined, throw2: undefined, score: 0 },
         { id: 3, throw1: undefined, throw2: undefined, score: 0 },
@@ -65,7 +65,7 @@ export const useScoreStore = defineStore('score', {
           if (!valueAdded) {
             if (frame.throw1 === undefined) {
               if (value === 10 && frame.id !== 9) {
-                frame.throw1 = 'strike'
+                frame.throw1 = value
                 frame.throw2 = 0
                 valueAdded = true
               } else {
@@ -103,8 +103,6 @@ export const useScoreStore = defineStore('score', {
     returnNumber(value) {
       if (value === undefined) {
         return 0
-      } else if (value === 'strike') {
-        return 10
       } else {
         return value
       }

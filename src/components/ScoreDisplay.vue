@@ -20,7 +20,7 @@
           <div class="col p-0 border-bottom" v-for="(frame, index) in store.frames" :key="frame.id">
             <div class="row p-0 border-bottom m-0 justify-content-center">
               <div class="col border-end p-1">
-                {{ printThrow1(frame.throw1) }}
+                {{ printThrow1(frame.throw1, frame.throw2) }}
               </div>
 
               <div class="col border-end p-1">{{ printThrow2(frame.throw2, frame.throw1) }}</div>
@@ -56,14 +56,12 @@ import { useScoreStore } from '../../stores/scoreStore.js'
 import ScoreInput from './ScoreInput.vue'
 const store = useScoreStore()
 
-function printThrow1(frameThrow) {
-  if (frameThrow === undefined || frameThrow === 'strike') {
+function printThrow1(frameThrow, nextThrow) {
+  if (frameThrow === undefined || frameThrow === 10) {
     return '\u00A0'
   } else if (frameThrow === 0) {
     return '-'
-  } else if (frameThrow === 10) {
-    return 'X'
-  } else {
+  }  else {
     return frameThrow
   }
 }
@@ -72,7 +70,7 @@ function printThrow2(frameThrow, previousThrow) {
   if (frameThrow === undefined) {
     return '\u00A0'
   } else {
-    if (previousThrow === 'strike') {
+    if (previousThrow === 10) {
       return 'X'
     } else if (frameThrow + previousThrow === 10) {
       return '/'
