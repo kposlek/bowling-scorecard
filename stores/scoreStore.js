@@ -19,6 +19,18 @@ export const useScoreStore = defineStore('score', {
       },
       //test
       inputValue: '',
+      /*  frames: [
+        { id: 0, throw1: 10, throw2: 0, score: 0 },
+        { id: 1, throw1: 7, throw2: 3, score: 0 },
+        { id: 2, throw1: 9, throw2: 0, score: 0 },
+        { id: 3, throw1: 10, throw2: 0, score: 0 },
+        { id: 4, throw1: 0, throw2: 8, score: 0 },
+        { id: 5, throw1: 8, throw2: 2, score: 0 },
+        { id: 6, throw1: 0, throw2: 6, score: 0 },
+        { id: 7, throw1: 10, throw2: 0, score: 0 },
+        { id: 8, throw1: 10, throw2: 0, score: 0 },
+        { id: 9, throw1: 10, throw2: 8, throw3: 1, score: 0 }
+      ], */
       frames: [
         { id: 0, throw1: undefined, throw2: undefined, score: 0 },
         { id: 1, throw1: undefined, throw2: undefined, score: 0 },
@@ -95,26 +107,35 @@ export const useScoreStore = defineStore('score', {
       } else {
         return
       }
+      this.totalScoreSum()
     },
 
     //Total Score
     totalScoreSum() {
-      this.frames.map((frame, ind) => {
-        if (ind === 0) {
-          if (frame.throw1 === undefined && frame.throw2 === undefined) {
-            frame.score = 0
-          } else if (frame.throw2 === undefined) {
-            frame.score = frame.throw1
-          } else {
-            frame.score = frame.throw1 + frame.throw2
+      this.frames.forEach((frame, index) => {
+        // first: add basic pins together
+        frame.score = frame.throw1 + frame.throw2
+        if (index === 9) {
+          frame.score = frame.score + frame.throw3
+        }
+
+        // second: add scores from previous frame
+        if (index > 0) {
+          frame.score = frame.score + this.frames[index - 1].score
+        }
+
+        // third: check for strikes and spares
+        if (index < 9) {
+          if (frame.throw1 + frame.throw2 === 10) {
+            frame.score = frame.score + this.frames[index + 1].throw1
           }
-        } else if (ind > 0 && ind < 9) {
-          if (frame.throw1 === undefined && frame.throw2 === undefined) {
-            frame.score = 0
-          } else if (frame.throw2 === undefined) {
-            frame.score = this.frames[ind - 1].score + frame.throw1
-          } else {
-            frame.score = this.frames[ind - 1].score + frame.throw1 + frame.throw2
+
+          if (frame.throw1 === 10) {
+            frame.score = frame.score + this.frames[index + 1].throw2
+
+            if (index < 8 && this.frames[index + 1].throw1 === 10) {
+              frame.score = frame.score + this.frames[index + 2].throw1
+            }
           }
         }
       })
