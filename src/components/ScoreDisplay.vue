@@ -17,16 +17,16 @@
             </div>
           </div>
 
-          <div class="col p-0 border-bottom" v-for="frame in store.frames" :key="frame.id">
+          <div class="col p-0 border-bottom" v-for="(frame, index) in store.frames" :key="frame.id">
             <div class="row p-0 border-bottom m-0 justify-content-center">
               <div class="col border-end p-1">
-                {{ printThrow1(frame.throw1) }}
+                {{ printThrow1(frame.throw1, index) }}
               </div>
 
               <div class="col border-end p-1">{{ printThrow2(frame.throw2, frame.throw1) }}</div>
 
               <div v-if="frame.id === 9" class="col border-end p-1">
-                {{ printThrow3(frame.throw3, frame.throw1) }}
+                {{ printThrow3(frame.throw3, frame.throw1, index) }}
               </div>
             </div>
             <!--   <div class="row p-1 m-0 justify-content-center border-end">
@@ -56,8 +56,11 @@ import { useScoreStore } from '../../stores/scoreStore.js'
 import ScoreInput from './ScoreInput.vue'
 const store = useScoreStore()
 
-function printThrow1(frameThrow) {
-  if (frameThrow === undefined || frameThrow === 10) {
+function printThrow1(frameThrow, index) {
+  if (index === 9 && frameThrow === 10) {
+    return 'X'
+  }
+  if (frameThrow === undefined || (frameThrow === 10 && index !== 9)) {
     return '\u00A0'
   } else if (frameThrow === 0) {
     return '-'
@@ -66,7 +69,10 @@ function printThrow1(frameThrow) {
   }
 }
 
-function printThrow2(frameThrow, previousThrow) {
+function printThrow2(frameThrow, previousThrow, index) {
+  if (index === 9 && frameThrow === 10) {
+    return 'X'
+  }
   if (frameThrow === undefined) {
     return '\u00A0'
   } else {
@@ -101,12 +107,12 @@ function printThrow3(frameThrow3, frameThrow1) {
   }
 }
 
- watch(
-   () => store.totalScoreSum(),
-   (newValue) => {
-     console.log(newValue)
-   }
- )
+watch(
+  () => store.totalScoreSum(),
+  (newValue) => {
+    console.log(newValue)
+  }
+)
 </script>
 
 <style scoped>
