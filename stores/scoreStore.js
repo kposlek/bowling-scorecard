@@ -20,8 +20,8 @@ export const useScoreStore = defineStore('score', {
       //test
       inputValue: '',
       frames: [
-        { id: 0, throw1: 10, throw2: 0, score: 10 },
-        { id: 1, throw1: 2, throw2: 5, score: 0 },
+        { id: 0, throw1: undefined, throw2: undefined, score: 0 },
+        { id: 1, throw1: undefined, throw2: undefined, score: 0 },
         { id: 2, throw1: undefined, throw2: undefined, score: 0 },
         { id: 3, throw1: undefined, throw2: undefined, score: 0 },
         { id: 4, throw1: undefined, throw2: undefined, score: 0 },
@@ -34,9 +34,6 @@ export const useScoreStore = defineStore('score', {
 
       //fictitious player
       player: 'Karolina',
-
-      //
-      totalScore: 0,
 
       //input validation error message
       errorMessage: '',
@@ -100,27 +97,27 @@ export const useScoreStore = defineStore('score', {
       }
     },
 
-    returnNumber(value) {
-      if (value === undefined) {
-        return 0
-      } else {
-        return value
-      }
-    },
-
     //Total Score
-    totalScoreSum(value, index) {
-      console.log(this.totalScore)
-      if (index !== 9) {
-        let throw1 = this.returnNumber(this.frames[index + 1].throw1)
-        let throw2 = this.returnNumber(this.frames[index + 1].throw2)
-        //this.totalScore = this.totalScore + this.frames[index].score + throw1 + throw2
-        //this.totalScore = this.totalScore + this.frames[index].score + throw1 + throw2
-      } else {
-        console.log(222222222222222)
-      }
-
-      return this.totalScore
+    totalScoreSum() {
+      this.frames.map((frame, ind) => {
+        if (ind === 0) {
+          if (frame.throw1 === undefined && frame.throw2 === undefined) {
+            frame.score = 0
+          } else if (frame.throw2 === undefined) {
+            frame.score = frame.throw1
+          } else {
+            frame.score = frame.throw1 + frame.throw2
+          }
+        } else if (ind > 0 && ind < 9) {
+          if (frame.throw1 === undefined && frame.throw2 === undefined) {
+            frame.score = 0
+          } else if (frame.throw2 === undefined) {
+            frame.score = this.frames[ind - 1].score + frame.throw1
+          } else {
+            frame.score = this.frames[ind - 1].score + frame.throw1 + frame.throw2
+          }
+        }
+      })
     }
   }
 })
