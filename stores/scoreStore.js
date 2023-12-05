@@ -5,16 +5,16 @@ export const useScoreStore = defineStore('score', {
   state: () => {
     return {
       static: {
-        //Headers for ScoreDisplay component
+        // headers for ScoreDisplay component
         frameHeader: 'Frames',
         playerHeader: 'Player',
         totalHeader: 'Total',
 
-        //Headers for ScoreInput component
+        // headers for ScoreInput component
         addButton: 'Add pins',
         inputHeading: 'Number of pins hit:',
 
-        // Messages
+        // messages
         requiredInputMessage: 'The entry is not valid. The total sum of all pins can be up to 10.',
         validatedInputMessage: 'The entry is not valid. Please enter a value between 1 and 10.',
         gameOverMessage: 'Congratulations! Well played!'
@@ -35,10 +35,9 @@ export const useScoreStore = defineStore('score', {
         { id: 9, throw1: undefined, throw2: undefined, throw3: undefined, score: 0 }
       ],
 
-      //fictitious player
       player: 'Karolina',
 
-      //input validation error message
+      // input validation error message
       errorMessage: '',
       validationError: '',
 
@@ -46,7 +45,6 @@ export const useScoreStore = defineStore('score', {
     }
   },
   actions: {
-    //validation on inputs value
     inputValidation(value) {
       const pinsHit = parseInt(value)
       return pinsHit >= 1 && pinsHit <= 10 && !isNaN(pinsHit)
@@ -55,7 +53,6 @@ export const useScoreStore = defineStore('score', {
     inputValidationError() {
       return (this.errorMessage = this.static.validatedInputMessage)
     },
-    //Score input
     addInput() {
       const pinsHit = parseInt(this.inputValue)
       if (isNaN(pinsHit)) return

@@ -11,7 +11,6 @@
           :class="{ 'is-invalid': store.errorMessage }"
           @keypress.enter="store.addInput()"
         />
-        <!-- <PopoverInfo /> -->
         <button
           class="btn btn-outline-secondary d-md-block d-none rounded-end"
           type="button"
