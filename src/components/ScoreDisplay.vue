@@ -1,9 +1,6 @@
 <template>
   <div class="w-100">
     <ScoreInput />
-    <!--   <div class="row">
-      <h1 class="text-center">{{ store.static.frameHeader }}</h1>
-    </div> -->
 
     <div class="row d-flex justify-content-center p-2">
       <div class="container text-center m-0 p-0 border-start border-top">
@@ -29,21 +26,11 @@
                 {{ printThrow3(frame.throw3, frame.throw1, index) }}
               </div>
             </div>
-            <!--   <div class="row p-1 m-0 justify-content-center border-end">
-              {{ printScore(frame) }}
-            </div> -->
+
             <div class="row p-1 m-0 justify-content-center border-end">
-              {{ frame.score }}
+              {{ frame.score || 0 }}
             </div>
-          </div>
-          <!--  <div class="col p-0 border-bottom">
-            <div class="row d-flex fw-bold m-0 p-1 justify-content-center border-bottom border-end">
-              {{ store.static.totalHeader }}
-            </div>
-            <div class="row d-flex m-0 p-1 justify-content-center border-end">
-              {{ store.totalScore }}
-            </div>
-          </div> -->
+          </div> 
         </div>
       </div>
     </div>
@@ -51,7 +38,6 @@
 </template>
 
 <script setup>
-import { watch } from 'vue'
 import { useScoreStore } from '../../stores/scoreStore.js'
 import ScoreInput from './ScoreInput.vue'
 const store = useScoreStore()
@@ -106,13 +92,6 @@ function printThrow3(frameThrow3, frameThrow1) {
     }
   }
 }
-
-watch(
-  () => store.totalScoreSum(),
-  (newValue) => {
-    console.log(newValue)
-  }
-)
 </script>
 
 <style scoped>
