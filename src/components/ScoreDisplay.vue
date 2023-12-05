@@ -17,7 +17,7 @@
             </div>
           </div>
 
-          <div class="col p-0 border-bottom" v-for="frame in store.frames" :key="frame.id">
+          <div class="col p-0 border-bottom" v-for="(frame, index) in store.frames" :key="frame.id">
             <div class="row p-0 border-bottom m-0 justify-content-center">
               <div class="col border-end p-1">
                 {{ printThrow1(frame.throw1) }}
@@ -29,8 +29,11 @@
                 {{ printThrow3(frame.throw3, frame.throw1) }}
               </div>
             </div>
+            <!--   <div class="row p-1 m-0 justify-content-center border-end">
+              {{ printScore(frame) }}
+            </div> -->
             <div class="row p-1 m-0 justify-content-center border-end">
-              {{ frame.score }}
+              {{ store.totalScoreSum(frame, index) }}
             </div>
           </div>
           <!--  <div class="col p-0 border-bottom">
@@ -48,6 +51,7 @@
 </template>
 
 <script setup>
+import { watch } from 'vue'
 import { useScoreStore } from '../../stores/scoreStore.js'
 import ScoreInput from './ScoreInput.vue'
 const store = useScoreStore()
@@ -98,6 +102,13 @@ function printThrow3(frameThrow3, frameThrow1) {
     }
   }
 }
+
+watch(
+  () => store.totalScore,
+  (newValue) => {
+    console.log(newValue)
+  }
+)
 </script>
 
 <style scoped>
