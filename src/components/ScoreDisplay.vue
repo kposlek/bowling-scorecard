@@ -23,14 +23,14 @@
               <div class="col border-end p-1">{{ printThrow2(frame.throw2, frame.throw1) }}</div>
 
               <div v-if="frame.id === 9" class="col border-end p-1">
-                {{ printThrow3(frame.throw3, frame.throw1, index) }}
+                {{ printThrow3(frame.throw3, index) }}
               </div>
             </div>
 
             <div class="row p-1 m-0 justify-content-center border-end">
               {{ frame.score || 0 }}
             </div>
-          </div> 
+          </div>
         </div>
       </div>
     </div>
@@ -68,27 +68,25 @@ function printThrow2(frameThrow, previousThrow, index) {
       return '/'
     } else if (frameThrow === 0) {
       return '-'
-    } else if (frameThrow === 10) {
-      return 'X'
     } else {
       return frameThrow
     }
   }
 }
-function printThrow3(frameThrow3, frameThrow1) {
-  if (frameThrow3 === undefined) {
-    return '\u00A0'
-  } else {
-    if (frameThrow1 === 10) {
-      if (frameThrow3 > 0 && frameThrow3 < 10) {
-        return frameThrow3
-      } else if (frameThrow3 === 0) {
-        return '-'
-      } else if (frameThrow3 === 10) {
-        return 'X'
-      }
-    } else {
+
+function printThrow3(frameThrow3, index) {
+  if (index === 9) {
+    if (frameThrow3 === 10) {
+      return 'X'
+    }
+    if (frameThrow3 === undefined) {
       return '\u00A0'
+    }
+    if (frameThrow3 === 0) {
+      return '-'
+    }
+    if (frameThrow3 > 0 && frameThrow3 < 10) {
+      return frameThrow3
     }
   }
 }
