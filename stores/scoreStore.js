@@ -16,7 +16,7 @@ export const useScoreStore = defineStore('score', {
 
         // messages
         requiredInputMessage: 'The entry is not valid. The total sum of all pins can be up to 10.',
-        validatedInputMessage: 'The entry is not valid. Please enter a value between 1 and 10.',
+        validatedInputMessage: 'The entry is not valid. Please enter a value between 0 and 10.',
         gameOverMessage: 'Congratulations! Well played!'
       },
 
@@ -47,15 +47,23 @@ export const useScoreStore = defineStore('score', {
   actions: {
     inputValidation(value) {
       const pinsHit = parseInt(value)
-      return pinsHit >= 1 && pinsHit <= 10 && !isNaN(pinsHit)
+      return pinsHit >= 0 && pinsHit <= 10 && !isNaN(pinsHit)
     },
 
     inputValidationError() {
       return (this.errorMessage = this.static.validatedInputMessage)
     },
+
     addInput() {
       const pinsHit = parseInt(this.inputValue)
+
       if (isNaN(pinsHit)) return
+
+      if (!this.inputValidation(pinsHit)) {
+        this.inputValidationError()
+        return
+      }
+
       let valueAdded = false
       this.validationError = ''
 
@@ -66,62 +74,69 @@ export const useScoreStore = defineStore('score', {
             return
           }
 
-          // handle first throws in frames
           if (frame.throw1 === undefined) {
-            if (pinsHit === STRIKE_PINS && frame.id !== LAST_FRAME_INDEX) {
-              frame.throw1 = pinsHit
-              frame.throw2 = 0
-            } else {
-              frame.throw1 = pinsHit
-            }
-            valueAdded = true
-
-            if (frame.id === LAST_FRAME_INDEX) {
-              this.inputValue = ''
-            }
-
+            valueAdded = this.handleFirstThrow(frame, pinsHit)
             return
           }
 
-          // handle second throws in frames
           if (frame.throw2 === undefined) {
-            if (frame.id !== LAST_FRAME_INDEX) {
-              if (frame.throw1 + pinsHit <= 10) {
-                frame.throw2 = pinsHit
-              } else {
-                this.errorMessage = ''
-                return (this.validationError = this.static.requiredInputMessage)
-              }
-            } else if (pinsHit >= 0 && pinsHit <= 10) {
-              frame.throw2 = pinsHit
-            }
-
-            if (frame.id === LAST_FRAME_INDEX) {
-              this.inputValue = ''
-              if (frame.throw1 + frame.throw2 < 10) {
-                this.gameOver = true
-              }
-            }
-
-            valueAdded = true
+            valueAdded = this.handleSecondThrow(frame, pinsHit)
             return
           }
 
-          // handle third throws in frames
           if (frame.throw3 === undefined && frame.id === LAST_FRAME_INDEX) {
-            frame.throw3 = pinsHit
-            valueAdded = true
-            this.gameOver = true
-
-            if (frame.id === LAST_FRAME_INDEX) {
-              this.inputValue = ''
-            }
+            valueAdded = this.handleThirdThrow(frame, pinsHit)
+            return
           }
         })
       } else {
         return
       }
       this.calculateScores()
+    },
+
+    handleFirstThrow(frame, pinsHit) {
+      if (pinsHit === STRIKE_PINS && frame.id !== LAST_FRAME_INDEX) {
+        this.frames[frame.id].throw1 = pinsHit
+        this.frames[frame.id].throw2 = 0
+      } else {
+        this.frames[frame.id].throw1 = pinsHit
+      }
+
+      if (frame.id === LAST_FRAME_INDEX) {
+        this.inputValue = ''
+      }
+
+      return true
+    },
+
+    handleSecondThrow(frame, pinsHit) {
+      if (frame.id !== LAST_FRAME_INDEX) {
+        if (frame.throw1 + pinsHit <= 10) {
+          this.frames[frame.id].throw2 = pinsHit
+        } else {
+          this.errorMessage = ''
+          this.validationError = this.static.requiredInputMessage
+        }
+      } else if (pinsHit >= 0 && pinsHit <= 10) {
+        this.frames[frame.id].throw2 = pinsHit
+        this.inputValue = ''
+        if (frame.throw1 + frame.throw2 < 10) {
+          this.gameOver = true
+        }
+      }
+      return true
+    },
+
+    handleThirdThrow(frame, pinsHit) {
+      this.frames[frame.id].throw3 = pinsHit
+      this.gameOver = true
+
+      if (frame.id === LAST_FRAME_INDEX) {
+        this.inputValue = ''
+      }
+
+      return true
     },
 
     calculateScores() {
